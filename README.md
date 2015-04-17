@@ -12,7 +12,7 @@ A super simple & flexible & useful config module.
 var config = require('config-lite');
 ```
 
-By default, `require('config-lite')` will bubbling find `config` directory from `process.cwd()`.
+By default, `require('config-lite')` will bubbling find `config` (or custom) directory from `process.cwd()`.
 
 See [test](https://github.com/nswbmw/config-lite/blob/master/test/test.js).
 
