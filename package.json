@@ -1,0 +1,28 @@
+{
+  "name": "config-lite",
+  "description": "A super simple & flexible & useful config module.",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd test\n../node_modules/mocha/bin/mocha --harmony test"
+  },
+  "keywords": [
+    "config",
+    "configure",
+    "configuration",
+    "production",
+    "development"
+  ],
+  "dependencies": {
+    "resolve": "~1.1.6"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.4",
+    "should": "^6.0.1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nswbmw/config-lite.git"
+  }
+}
