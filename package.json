@@ -1,7 +1,7 @@
 {
   "name": "config-lite",
   "description": "A super simple & flexible & useful config module.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.js",
   "scripts": {
     "test": "cd test\n../node_modules/mocha/bin/mocha --harmony test"

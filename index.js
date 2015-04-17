@@ -2,16 +2,16 @@ var resolve = require('resolve');
 var path = require('path');
 
 var id = process.env.NODE_ENV || 'default';
-var basedir = process.env.basedir || process.cwd();
-var moduleDirectory = process.env.moduleDirectory || 'config';
+var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.cwd();
+var CONFIG_DIR = process.env.CONFIG_DIR || 'config';
 
 try {
   var filepath = resolve.sync(id, {
-    basedir: basedir,
+    basedir: CONFIG_BASEDIR,
     extensions: ['.js', '.json', '.node'],
-    moduleDirectory: moduleDirectory
+    moduleDirectory: CONFIG_DIR
   });
   module.exports = require(filepath);
 } catch (e) {
-  throw new Error('Cannot read config: ' + path.join(basedir, moduleDirectory + '/' + id));
+  throw new Error('Cannot read config: ' + path.join(CONFIG_BASEDIR, CONFIG_DIR + '/' + id));
 }
