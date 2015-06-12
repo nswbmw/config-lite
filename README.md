@@ -16,6 +16,8 @@ By default, `require('config-lite')` will bubbling find `config` (or custom) dir
 
 See [test](https://github.com/nswbmw/config-lite/blob/master/test/test.js).
 
+After v1.0.0, support yaml config file.
+
 ### Example
 
 **config/default.js**

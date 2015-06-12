@@ -1,10 +1,10 @@
 {
   "name": "config-lite",
   "description": "A super simple & flexible & useful config module.",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cd test\n../node_modules/mocha/bin/mocha --harmony test"
+    "test": "cd test && ../node_modules/mocha/bin/mocha --harmony test"
   },
   "keywords": [
     "config",
@@ -14,6 +14,7 @@
     "development"
   ],
   "dependencies": {
+    "js-yaml": "^3.3.1",
     "resolve": "~1.1.6"
   },
   "devDependencies": {
