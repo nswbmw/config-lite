@@ -49,6 +49,14 @@ describe('custom config', function () {
     delete require.cache[path.join(__dirname, '../index.js')];
     delete process.env.NODE_ENV;
   });
+  it('CONFIG', function () {
+    process.env.NODE_ENV = 'test';
+    process.env.CONFIG = '{"name":"CONFIG"}';
+    require('..').name.should.be.exactly('CONFIG');
+    delete require.cache[path.join(__dirname, '../index.js')];
+    delete process.env.NODE_ENV;
+    delete process.env.CONFIG;
+  });
   it('CONFIG_BASEDIR', function () {
     process.env.CONFIG_DIR = 'config2';
     process.env.NODE_ENV = 'test';
