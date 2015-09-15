@@ -57,6 +57,12 @@ NODE_ENV=production node app
 require('config-lite'); //=> 'production'
 ```
 
+or:
+
+```
+NODE_ENV=production node app --host=localhost --port=3000
+```
+
 ### Test
 
     npm test
