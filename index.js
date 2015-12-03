@@ -24,5 +24,6 @@ try {
     module.exports = merge(CONFIG, require(filepath), false);
   }
 } catch (e) {
-  throw new Error('Cannot read config: ' + path.join(CONFIG_BASEDIR, CONFIG_DIR + '/' + id));
+	console.log('Cannot read config: ' + path.join(CONFIG_BASEDIR, CONFIG_DIR + '/' + id));
+	throw e;
 }
