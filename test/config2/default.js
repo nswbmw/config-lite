@@ -1,3 +1,4 @@
 module.exports = {
-  name: 'config2/default'
+  name: 'config2/default',
+  age: 100
 };
