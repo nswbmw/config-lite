@@ -11,9 +11,14 @@ var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.cwd();
 var CONFIG_DIR = process.env.CONFIG_DIR || 'config';
 var CONFIG = merge(JSON.parse(process.env.CONFIG || '{}'), argv);
 
-var config = module.exports = loadConfig(filename);
+module.exports = {};
+
 try {
-  module.exports = merge(config, loadConfig('default'), false);
+  module.exports = loadConfig(filename);
+} catch (e) {}
+
+try {
+  module.exports = merge(module.exports, loadConfig('default'), false);
 } catch (e) {}
 
 function loadConfig(filename) {
