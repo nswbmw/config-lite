@@ -5,6 +5,7 @@ var resolve = require('resolve');
 var yaml = require('js-yaml');
 var merge = require('merge-descriptors');
 var argv = require('optimist').argv;
+var chalk = require('chalk');
 
 var filename = process.env.NODE_ENV || 'default';
 var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.cwd();
@@ -15,11 +16,17 @@ module.exports = {};
 
 try {
   module.exports = loadConfig(filename);
-} catch (e) {}
+} catch (e) {
+  console.error(chalk.red('config-lite load `' + filename + '` failed'));
+  console.error(chalk.red(e.stack));
+}
 
 try {
   module.exports = merge(module.exports, loadConfig('default'), false);
-} catch (e) {}
+} catch (e) {
+  console.error(chalk.red('config-lite load `default` failed'));
+  console.error(chalk.red(e.stack));
+}
 
 function loadConfig(filename) {
   var filepath = resolve.sync(filename, {
