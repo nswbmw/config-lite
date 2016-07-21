@@ -8,9 +8,9 @@ var argv = require('optimist').argv;
 var chalk = require('chalk');
 
 var filename = process.env.NODE_ENV || 'default';
-var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.cwd();
-var CONFIG_DIR = process.env.CONFIG_DIR || 'config';
-var CONFIG = merge(JSON.parse(process.env.CONFIG || '{}'), argv);
+var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR || process.cwd();
+var CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR || 'config';
+var CONFIG = merge(JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'), argv);
 
 module.exports = {};
 
