@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var resolve = require('resolve');
 var yaml = require('js-yaml');
 var merge = require('merge-descriptors');
@@ -8,17 +9,21 @@ var argv = require('optimist').argv;
 var chalk = require('chalk');
 
 var filename = process.env.NODE_ENV || 'default';
-var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR || process.cwd();
+var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR
+  || (module.parent && module.parent.filename ? path.dirname(module.parent.filename) : '')
+  || process.cwd();
 var CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR || 'config';
 var CONFIG = merge(JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'), argv);
 
 module.exports = {};
 
-try {
-  module.exports = loadConfig(filename);
-} catch (e) {
-  console.error(chalk.red('config-lite load `' + filename + '` failed'));
-  console.error(chalk.red(e.stack));
+if (filename !== 'default') {
+  try {
+    module.exports = loadConfig(filename);
+  } catch (e) {
+    console.error(chalk.red('config-lite load `' + filename + '` failed'));
+    console.error(chalk.red(e.stack));
+  }
 }
 
 try {
