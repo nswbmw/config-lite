@@ -33,6 +33,13 @@ try {
   console.error(chalk.red(e.stack));
 }
 
+try {
+  module.exports = merge(module.exports, loadConfig('local'), false);
+} catch (e) {
+  console.error(chalk.red('config-lite load `local` failed'));
+  console.error(chalk.red(e.stack));
+}
+
 function loadConfig(filename) {
   var filepath = resolve.sync(filename, {
     basedir: CONFIG_BASEDIR,
