@@ -1,71 +1,76 @@
 ## config-lite
 
-A super simple & flexible & useful config module.
+A super simple & flexible & intuitive config module.
 
 ### Install
 
-    npm i config-lite --save
+```
+npm i config-lite --save
+```
 
-### Usage
+### Migration
+
+In v1:
 
 ```
 var config = require('config-lite');
 ```
 
-By default, `require('config-lite')` will bubbling find `config` (or custom) directory from `process.cwd()`.
-
-See [test](https://github.com/nswbmw/config-lite/blob/master/test/test.js).
-
-After v1.0.0, support yaml config file.
-
-### Example
-
-**config/default.js**
+In v2, you should specify `config_basedir` directory for bubbling find config file.
 
 ```
-module.exports = 'default';
+var config = require('config-lite')(__dirname);
 ```
 
-**config/test.js**
+### Usage
 
 ```
-module.exports = 'test';
-```
-
-**config/production.js**
-
-```
-module.exports = 'production';
-```
-\====================================
-
-```
-node app
-
-require('config-lite'); //=> 'default'
-```
-
-```
-NODE_ENV=test node app
-
-require('config-lite'); //=> 'test'
-```
-
-```
-NODE_ENV=production node app
-
-require('config-lite'); //=> 'production'
+var config = require('config-lite')(__dirname);
 ```
 
 or:
 
 ```
-NODE_ENV=production node app --host=localhost --port=3000
+var config = require('config-lite')({
+  filename: 'test',
+  config_basedir: __dirname,
+  config_dir: 'config'
+});
 ```
+
+### Options
+
+- filename: config file name, default: `default`, support: `['.js', '.json', '.node', '.yaml', '.yml']`.
+- config_basedir: directory for begining bubbling find config directory.
+- config_dir: config directory name, default: `config`.
+- config: default config object that overwrite config file.
+
+### Priority
+
+environment option > custom option > default option
+
+For example:
+
+```
+NODE_ENV=test NODE_CONFIG='{"port":3000}' node app.js --port=3001
+```
+
+loading order:
+
+`--port=3001` > `NODE_CONFIG='{"port":3000}'` > opt.config > test config file > default config file
+
+### Environment Variables
+
+- NODE_ENV -> filename
+- CONFIG_BASEDIR || NODE_CONFIG_BASEDIR -> config_dirname
+- CONFIG_DIR || NODE_CONFIG_DIR -> config_dir
+- CONFIG || NODE_CONFIG -> config
 
 ### Test
 
-    npm test
+```
+npm test
+```
 
 ### License
 

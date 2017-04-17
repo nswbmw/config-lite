@@ -1,3 +1,4 @@
 {
-  "name": "config/test"
+  "name": "config/test",
+  "port": 3001
 }

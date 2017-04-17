@@ -2,46 +2,60 @@
 
 var fs = require('fs');
 var path = require('path');
-var resolve = require('resolve');
-var yaml = require('js-yaml');
-var merge = require('merge-descriptors');
-var argv = require('optimist').argv;
+
+var _ = require('lodash');
 var chalk = require('chalk');
+var yaml = require('js-yaml');
+var resolve = require('resolve');
+var argv = require('optimist').argv;
 
-var filename = process.env.NODE_ENV || 'default';
-var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR
-  || (module.parent && module.parent.filename ? path.dirname(module.parent.filename) : '')
-  || process.cwd();
-var CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR || 'config';
-var CONFIG = merge(JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'), argv);
+var NODE_ENV = process.env.NODE_ENV;
+var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR;
+var CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR;
+var CONFIG = _.assign({}, JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'), _.omit(argv, '_', '$0'));
 
-module.exports = {};
+module.exports = function configLite(customOpt) {
+  var config = {};
+  if (!_.isPlainObject(customOpt)) {
+    if (customOpt && _.isString(customOpt)) {
+      customOpt = { config_basedir: customOpt };
+    } else {
+      throw new TypeError('config-lite custom option should be a string or an object');
+    }
+  }
+  var opt = {
+    filename: NODE_ENV || customOpt.filename || 'default',
+    config_basedir: CONFIG_BASEDIR || customOpt.config_basedir,
+    config_dir: CONFIG_DIR || customOpt.config_dir || 'config'
+  };
 
-if (filename !== 'default') {
+  if (opt.filename !== 'default') {
+    try {
+      config = loadConfigFile(opt.filename, opt);
+    } catch (e) {
+      console.error(chalk.red('config-lite load "' + opt.filename + '" failed.'));
+      console.error(chalk.red(e.stack));
+    }
+  }
+
   try {
-    module.exports = loadConfig(filename);
+    config = _.assign({}, loadConfigFile('default', opt), config);
   } catch (e) {
-    console.error(chalk.red('config-lite load `' + filename + '` failed'));
+    console.error(chalk.red('config-lite load "default" failed.'));
     console.error(chalk.red(e.stack));
   }
+  return _.assign({}, config, customOpt.config, CONFIG);
 }
 
-try {
-  module.exports = merge(module.exports, loadConfig('default'), false);
-} catch (e) {
-  console.error(chalk.red('config-lite load `default` failed'));
-  console.error(chalk.red(e.stack));
-}
-
-function loadConfig(filename) {
+function loadConfigFile(filename, opt) {
   var filepath = resolve.sync(filename, {
-    basedir: CONFIG_BASEDIR,
+    basedir: opt.config_basedir,
     extensions: ['.js', '.json', '.node', '.yaml', '.yml'],
-    moduleDirectory: CONFIG_DIR
+    moduleDirectory: opt.config_dir
   });
   if (/\.ya?ml$/.test(filepath)) {
-    return merge(CONFIG, yaml.safeLoad(fs.readFileSync(filepath , 'utf8')), false);
+    return yaml.safeLoad(fs.readFileSync(filepath , 'utf8'));
   } else {
-    return merge(CONFIG, require(filepath), false);
+    return require(filepath);
   }
 }

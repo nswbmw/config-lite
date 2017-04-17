@@ -1,3 +1,4 @@
 module.exports = {
-  name: 'config/default'
+  name: 'config/default',
+  port: 3000
 };
