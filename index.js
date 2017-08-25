@@ -1,21 +1,20 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-var _ = require('lodash');
-var chalk = require('chalk');
-var yaml = require('js-yaml');
-var resolve = require('resolve');
-var argv = require('optimist').argv;
+const _ = require('lodash');
+const chalk = require('chalk');
+const resolve = require('resolve');
+const argv = require('optimist').argv;
 
-var NODE_ENV = process.env.NODE_ENV;
-var CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR;
-var CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR;
-var CONFIG = _.assign({}, JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'), _.omit(argv, '_', '$0'));
+const NODE_ENV = process.env.NODE_ENV;
+const CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR;
+const CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR;
+const CONFIG = _.assign({}, JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'), _.omit(argv, '_', '$0'));
 
 module.exports = function configLite(customOpt) {
-  var config = {};
+  let config = {};
   if (!_.isPlainObject(customOpt)) {
     if (customOpt && _.isString(customOpt)) {
       customOpt = { config_basedir: customOpt };
@@ -23,7 +22,7 @@ module.exports = function configLite(customOpt) {
       throw new TypeError('config-lite custom option should be a string or an object');
     }
   }
-  var opt = {
+  const opt = {
     filename: NODE_ENV || customOpt.filename || 'default',
     config_basedir: CONFIG_BASEDIR || customOpt.config_basedir,
     config_dir: CONFIG_DIR || customOpt.config_dir || 'config'
@@ -48,13 +47,15 @@ module.exports = function configLite(customOpt) {
 }
 
 function loadConfigFile(filename, opt) {
-  var filepath = resolve.sync(filename, {
+  const filepath = resolve.sync(filename, {
     basedir: opt.config_basedir,
-    extensions: ['.js', '.json', '.node', '.yaml', '.yml'],
+    extensions: ['.js', '.json', '.node', '.yaml', '.yml', '.toml'],
     moduleDirectory: opt.config_dir
   });
   if (/\.ya?ml$/.test(filepath)) {
-    return yaml.safeLoad(fs.readFileSync(filepath , 'utf8'));
+    return require('js-yaml').safeLoad(fs.readFileSync(filepath , 'utf8'));
+  } else if (/\.toml$/.test(filepath)) {
+    return require('toml').parse(fs.readFileSync(filepath , 'utf8'));
   } else {
     return require(filepath);
   }

@@ -1,37 +1,37 @@
 ## config-lite
 
-A super simple & flexible & intuitive config module.
+A super simple & flexible & intuitive config module, support `yaml` & `toml`.
 
 ### Install
 
-```
-npm i config-lite --save
+```bash
+$ npm i config-lite --save
 ```
 
 ### Migration
 
 In v1:
 
-```
-var config = require('config-lite');
+```js
+const config = require('config-lite');
 ```
 
 In v2, you should specify `config_basedir` directory for bubbling find config file.
 
-```
-var config = require('config-lite')(__dirname);
+```js
+const config = require('config-lite')(__dirname);
 ```
 
 ### Usage
 
-```
-var config = require('config-lite')(__dirname);
+```js
+const config = require('config-lite')(__dirname);
 ```
 
 or:
 
-```
-var config = require('config-lite')({
+```js
+const config = require('config-lite')({
   filename: 'test',
   config_basedir: __dirname,
   config_dir: 'config'
@@ -40,7 +40,7 @@ var config = require('config-lite')({
 
 ### Options
 
-- filename: config file name, default: `default`, support: `['.js', '.json', '.node', '.yaml', '.yml']`.
+- filename: config file name, default: `default`, support: `['.js', '.json', '.node', '.yaml', '.yml', '.toml']`.
 - config_basedir: directory for begining bubbling find config directory.
 - config_dir: config directory name, default: `config`.
 - config: default config object that overwrite config file.
@@ -51,8 +51,8 @@ environment option > custom option > default option
 
 For example:
 
-```
-NODE_ENV=test NODE_CONFIG='{"port":3000}' node app.js --port=3001
+```bash
+$ NODE_ENV=test NODE_CONFIG='{"port":3000}' node app.js --port=3001
 ```
 
 loading order:
@@ -68,8 +68,8 @@ loading order:
 
 ### Test
 
-```
-npm test
+```bash
+$ npm test
 ```
 
 ### License
