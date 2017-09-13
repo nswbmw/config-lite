@@ -43,7 +43,10 @@ module.exports = function configLite(customOpt) {
     console.error(chalk.red('config-lite load "default" failed.'));
     console.error(chalk.red(e.stack));
   }
-  return _.assign({}, config, customOpt.config, CONFIG);
+
+  const customEnvConfig = getCustomEnvVars(opt);
+
+  return _.assign({}, config, customEnvConfig, customOpt.config, CONFIG);
 }
 
 function loadConfigFile(filename, opt) {
@@ -59,4 +62,39 @@ function loadConfigFile(filename, opt) {
   } else {
     return require(filepath);
   }
+}
+
+function getCustomEnvVars (opt) {
+  let result;
+
+  try {
+    result = loadConfigFile('custom-environment-variables', opt);
+  } catch (e) {
+    return {};
+  }
+  
+  return replacementDeep(result, process.env);
+}
+
+function replacementDeep (envConfigMap, envVars) {
+  const result = {};
+
+  function _replacementVars(map, vars) {
+    for (let prop in map) {
+      const value = map[prop];
+      if (typeof(value) === 'string') { // 叶子节点
+        if (vars[value]) {
+          result[prop] = vars[value];
+        }
+      } else if (_.isObject(value)) { // 递归
+        _replacementVars(value, vars, pathTo.concat(prop));
+      } else {
+        msg = "Illegal key (" + prop + ") type : " + typeof(value);
+        throw Error(msg);
+      }
+    }
+  }
+
+  _replacementVars(envConfigMap, envVars);
+  return result;
 }
