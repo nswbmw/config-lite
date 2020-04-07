@@ -1,10 +1,10 @@
 {
   "name": "config-lite",
   "description": "A super simple & flexible & intuitive config module.",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test node ./test/test --age=100"
+    "test": "NODE_ENV=production node ./test/test --age=100"
   },
   "keywords": [
     "config",
@@ -17,12 +17,12 @@
     "toml"
   ],
   "dependencies": {
-    "chalk": "2.1.0",
-    "js-yaml": "3.9.1",
-    "lodash": "4.17.4",
+    "chalk": "4.0.0",
+    "js-yaml": "3.13.1",
+    "lodash": "4.17.15",
     "optimist": "0.6.1",
-    "resolve": "1.4.0",
-    "toml": "2.3.2"
+    "resolve": "1.15.1",
+    "toml": "3.0.0"
   },
   "license": "MIT",
   "repository": {

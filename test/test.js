@@ -1,10 +1,8 @@
-'use strict';
-
-var assert = require('assert');
-var config = require('./app');
+const assert = require('assert')
+const config = require('..')(__dirname)
 
 assert.deepEqual({
   age: 100,
-  port: 3000,
-  name: 'app/config/test'
-}, config);
+  name: 'production',
+  mongodb: { db: 'production', url: 'default' }
+}, config)

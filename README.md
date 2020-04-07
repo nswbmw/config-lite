@@ -8,20 +8,6 @@ A super simple & flexible & intuitive config module, support `yaml` & `toml`.
 $ npm i config-lite --save
 ```
 
-### Migration
-
-In v1:
-
-```js
-const config = require('config-lite');
-```
-
-In v2, you should specify `config_basedir` directory for bubbling find config file.
-
-```js
-const config = require('config-lite')(__dirname);
-```
-
 ### Usage
 
 ```js
