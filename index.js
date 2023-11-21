@@ -1,15 +1,12 @@
 const fs = require('fs')
-const path = require('path')
 
 const _ = require('lodash')
-const chalk = require('chalk')
 const resolve = require('resolve')
-const argv = require('optimist').argv
 
 const NODE_ENV = process.env.NODE_ENV
 const CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR
 const CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR
-const CONFIG = _.defaultsDeep({}, _.omit(argv, '_', '$0'), JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'))
+const CONFIG = _.defaultsDeep({}, JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'))
 
 module.exports = function configLite(customOpt) {
   let config = {}
@@ -30,16 +27,16 @@ module.exports = function configLite(customOpt) {
     try {
       config = loadConfigFile(opt.filename, opt)
     } catch (e) {
-      console.error(chalk.red('config-lite load "' + opt.filename + '" failed.'))
-      console.error(chalk.red(e.stack))
+      console.error('config-lite load "' + opt.filename + '" failed.')
+      console.error(e.stack)
     }
   }
 
   try {
     config = _.defaultsDeep({}, config, loadConfigFile('default', opt))
   } catch (e) {
-    console.error(chalk.red('config-lite load "default" failed.'))
-    console.error(chalk.red(e.stack))
+    console.error('config-lite load "default" failed.')
+    console.error(e.stack)
   }
   return _.defaultsDeep({}, CONFIG, customOpt.config, config)
 }

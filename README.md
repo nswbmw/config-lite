@@ -38,12 +38,12 @@ environment option > custom option > default option
 For example:
 
 ```bash
-$ NODE_ENV=test NODE_CONFIG='{"port":3000}' node app.js --port=3001
+$ NODE_ENV=production NODE_CONFIG='{"port":3000}' node app.js
 ```
 
 loading order:
 
-`--port=3001` > `NODE_CONFIG='{"port":3000}'` > opt.config > test config file > default config file
+`NODE_CONFIG='{"port":3000}'` > opt.config > production config file > default config file
 
 ### Environment Variables
 

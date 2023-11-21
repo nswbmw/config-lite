@@ -1,6 +1,6 @@
 {
-  "name": "production",
   "mongodb": {
-    "db": "production"
+    "name": "production",
+    "url": "url"
   }
 }

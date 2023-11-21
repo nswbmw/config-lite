@@ -1,3 +1,7 @@
+### 4.0.0/2023-11-21
+
+- remove useless deps
+
 ### 3.0.0/2020-04-17
 
 - use `_.defaultsDeep`

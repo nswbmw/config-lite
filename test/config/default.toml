@@ -1,6 +1,0 @@
-name = "default"
-age = 0
-
-[mongodb]
-url = "default"
-db = "default"

@@ -1,0 +1,6 @@
+{
+  "name": "default",
+  "mongodb": {
+    "name": "default"
+  }
+}
