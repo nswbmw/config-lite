@@ -11,48 +11,61 @@ $ npm i config-lite --save
 ### Usage
 
 ```js
-const config = require('config-lite')(__dirname);
+const config = require('config-lite')
 ```
 
-or:
+Or with ES modules:
 
 ```js
-const config = require('config-lite')({
-  filename: 'test',
-  config_basedir: __dirname,
-  config_dir: 'config'
-});
+import config from 'config-lite'
 ```
 
-### Options
+### Directory Structure
 
-- filename: config file name, default: `default`, support: `['.js', '.json', '.node', '.yaml', '.yml', '.toml']`.
-- config_basedir: directory for begining bubbling find config directory.
-- config_dir: config directory name, default: `config`.
-- config: default config object that overwrite config file.
+```
+.
+├── config
+│   ├── default.js
+│   └── production.js
+└── example.js
+```
 
-### Priority
+Configuration is controlled via environment variables:
 
-environment option > custom option > default option
+- `NODE_ENV`: which config file to load, default: `default`.
+- `CONFIG_BASEDIR` / `NODE_CONFIG_BASEDIR`: base directory to start looking for the config directory, default: the directory where `config-lite` is installed (usually `node_modules/config-lite`).
+- `CONFIG_DIR` / `NODE_CONFIG_DIR`: config directory name, default: `config`.
+- `CONFIG` / `NODE_CONFIG`: JSON string that overwrites values from config files, eg: `NODE_CONFIG='{"port":3000}'`.
 
-For example:
+Supported config file extensions:
+
+- `.js`, `.json`, `.node`, `.yaml`, `.yml`, `.toml`.
+
+For `.yaml` / `.yml` support you need to install [`js-yaml`](https://www.npmjs.com/package/js-yaml), and for `.toml` support you need [`toml`](https://www.npmjs.com/package/toml).
+
+### Merge Order
+
+Configuration files are merged using `lodash.merge`, where later sources override earlier ones:
+
+```
+merge({}, default file, ${NODE_ENV} file, environment variables)
+```
+
+When running with `NODE_ENV=production`:
 
 ```bash
 $ NODE_ENV=production NODE_CONFIG='{"port":3000}' node app.js
 ```
 
-loading order:
+The merge order will be:
 
-`NODE_CONFIG='{"port":3000}'` > opt.config > production config file > default config file
+```
+merge({}, default.js, production.js, {"port":3000})
+```
 
-### Environment Variables
+This means `NODE_CONFIG` values take highest priority, followed by the environment-specific file (e.g., `production.js`), and finally the `default.js` file as the base.
 
-- NODE_ENV -> filename
-- CONFIG_BASEDIR || NODE_CONFIG_BASEDIR -> config_dirname
-- CONFIG_DIR || NODE_CONFIG_DIR -> config_dir
-- CONFIG || NODE_CONFIG -> config
-
-### Test
+### Test (100% coverage)
 
 ```bash
 $ npm test

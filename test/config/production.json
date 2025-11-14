@@ -1,6 +1,0 @@
-{
-  "mongodb": {
-    "name": "production",
-    "url": "url"
-  }
-}

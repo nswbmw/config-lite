@@ -1,3 +1,8 @@
+### 5.0.0/2025-11-13
+
+- refactor codes
+- support ESM
+
 ### 4.0.0/2023-11-21
 
 - remove useless deps

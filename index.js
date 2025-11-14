@@ -1,56 +1,45 @@
-const fs = require('fs')
+const fs = require('node:fs')
 
-const _ = require('lodash')
+const merge = require('lodash.merge')
 const resolve = require('resolve')
 
-const NODE_ENV = process.env.NODE_ENV
-const CONFIG_BASEDIR = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR
-const CONFIG_DIR = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR
-const CONFIG = _.defaultsDeep({}, JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'))
+const filename = process.env.NODE_ENV || 'default'
+const configBasedir = process.env.CONFIG_BASEDIR || process.env.NODE_CONFIG_BASEDIR || __dirname
+const configDir = process.env.CONFIG_DIR || process.env.NODE_CONFIG_DIR || 'config'
+const CONFIG = merge({}, JSON.parse(process.env.CONFIG || process.env.NODE_CONFIG || '{}'))
 
-module.exports = function configLite(customOpt) {
+module.exports = (function configLite () {
   let config = {}
-  if (!_.isPlainObject(customOpt)) {
-    if (customOpt && _.isString(customOpt)) {
-      customOpt = { config_basedir: customOpt }
-    } else {
-      throw new TypeError('config-lite custom option should be a string or an object')
-    }
-  }
-  const opt = {
-    filename: NODE_ENV || customOpt.filename || 'default',
-    config_basedir: CONFIG_BASEDIR || customOpt.config_basedir,
-    config_dir: CONFIG_DIR || customOpt.config_dir || 'config'
-  }
 
-  if (opt.filename !== 'default') {
+  if (filename !== 'default') {
     try {
-      config = loadConfigFile(opt.filename, opt)
+      config = loadConfigFile(filename)
     } catch (e) {
-      console.error('config-lite load "' + opt.filename + '" failed.')
+      console.error('config-lite load "' + filename + '" failed.')
       console.error(e.stack)
     }
   }
 
   try {
-    config = _.defaultsDeep({}, config, loadConfigFile('default', opt))
+    config = merge({}, loadConfigFile('default'), config)
   } catch (e) {
     console.error('config-lite load "default" failed.')
     console.error(e.stack)
   }
-  return _.defaultsDeep({}, CONFIG, customOpt.config, config)
-}
 
-function loadConfigFile(filename, opt) {
+  return merge({}, config, CONFIG)
+})()
+
+function loadConfigFile (filename) {
   const filepath = resolve.sync(filename, {
-    basedir: opt.config_basedir,
+    basedir: configBasedir,
     extensions: ['.js', '.json', '.node', '.yaml', '.yml', '.toml'],
-    moduleDirectory: opt.config_dir
+    moduleDirectory: configDir
   })
   if (/\.ya?ml$/.test(filepath)) {
-    return require('js-yaml').safeLoad(fs.readFileSync(filepath , 'utf8'))
+    return require('js-yaml').load(fs.readFileSync(filepath, 'utf8'))
   } else if (/\.toml$/.test(filepath)) {
-    return require('toml').parse(fs.readFileSync(filepath , 'utf8'))
+    return require('toml').parse(fs.readFileSync(filepath, 'utf8'))
   } else {
     return require(filepath)
   }
