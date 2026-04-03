@@ -1,6 +1,6 @@
 {
   "name": "config-lite",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "A super simple & flexible & intuitive config module.",
   "main": "index.js",
   "exports": {
