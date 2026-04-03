@@ -39,7 +39,7 @@ Configuration is controlled via environment variables:
 
 Supported config file extensions:
 
-- `.js`, `.json`, `.node`, `.yaml`, `.yml`, `.toml`.
+- `.cjs`, `.js`, `.json`, `.node`, `.yaml`, `.yml`, `.toml`.
 
 For `.yaml` / `.yml` support you need to install [`js-yaml`](https://www.npmjs.com/package/js-yaml), and for `.toml` support you need [`toml`](https://www.npmjs.com/package/toml).
 

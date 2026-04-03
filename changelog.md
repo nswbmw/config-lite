@@ -1,3 +1,8 @@
+### 5.1.0/2026-04-03
+
+- feat: support .cjs
+- chore: update deps
+
 ### 5.0.0/2025-11-13
 
 - refactor codes

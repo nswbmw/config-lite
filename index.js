@@ -33,7 +33,7 @@ module.exports = (function configLite () {
 function loadConfigFile (filename) {
   const filepath = resolve.sync(filename, {
     basedir: configBasedir,
-    extensions: ['.js', '.json', '.node', '.yaml', '.yml', '.toml'],
+    extensions: ['.cjs', '.js', '.json', '.node', '.yaml', '.yml', '.toml'],
     moduleDirectory: configDir
   })
   if (/\.ya?ml$/.test(filepath)) {

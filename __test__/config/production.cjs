@@ -1,0 +1,9 @@
+module.exports = {
+  a: 2,
+  nested: {
+    production: 2
+  },
+  feature: {
+    enabled: true
+  }
+}
