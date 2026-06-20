@@ -1,3 +1,7 @@
+### 6.0.0/2026-06-20
+
+- fix: unwrap `__esModule` config files for ESM
+
 ### 5.1.1/2026-04-03
 
 - fix: remove 18.x ci

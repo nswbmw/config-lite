@@ -40,6 +40,15 @@ test('loads YAML via mocked parser', async () => {
   expect(cfg.nested.yaml).toBe(true)
 })
 
+test('unwraps __esModule config file', async () => {
+  const cfg = await reload({ NODE_ENV: 'transpiled' })
+  expect(cfg.esmFlag).toBe(true)
+  expect(cfg.nested.esm).toBe(5)
+  expect(cfg.__esModule).toBeUndefined()
+  expect(cfg.default).toBeUndefined()
+  expect(cfg.nested.default).toBe(1)
+})
+
 test('loads TOML via mocked parser', async () => {
   const cfg = await reload({ NODE_ENV: 'toml' })
   expect(cfg.port).toBe(3002)

@@ -36,11 +36,16 @@ function loadConfigFile (filename) {
     extensions: ['.cjs', '.js', '.json', '.node', '.yaml', '.yml', '.toml'],
     moduleDirectory: configDir
   })
+  let result
   if (/\.ya?ml$/.test(filepath)) {
-    return require('js-yaml').load(fs.readFileSync(filepath, 'utf8'))
+    result = require('js-yaml').load(fs.readFileSync(filepath, 'utf8'))
   } else if (/\.toml$/.test(filepath)) {
-    return require('toml').parse(fs.readFileSync(filepath, 'utf8'))
+    result = require('toml').parse(fs.readFileSync(filepath, 'utf8'))
   } else {
-    return require(filepath)
+    result = require(filepath)
   }
+  if (result && result.__esModule && 'default' in result) {
+    return result.default
+  }
+  return result
 }
